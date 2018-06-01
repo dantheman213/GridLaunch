@@ -65,7 +65,7 @@ namespace GridLaunch
             }
         }
 
-        private static void launchScreensaver(String appPath)
+        private static void launchScreensaver(String appPath, String arg)
         {
             string javaBin = getJavaInstallationPath() + "\\bin\\java.exe";
             string jarPath = appPath + "\\" + EXECUTABLE_JAR;
@@ -73,7 +73,7 @@ namespace GridLaunch
 
             Process proc = new Process();
             proc.StartInfo.FileName = "java";
-            proc.StartInfo.Arguments = "-jar " + jarPath + " /s";
+            proc.StartInfo.Arguments = "-jar " + jarPath + arg;
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             proc.Start();
@@ -93,7 +93,14 @@ namespace GridLaunch
             string appPath = getScreensaverPath();
             if(!String.IsNullOrEmpty(appPath))
             {
-                launchScreensaver(appPath);
+                string arg = "";
+
+                if(args != null && args.Length > 0)
+                {
+                    arg = " " + args[0];
+                }
+
+                launchScreensaver(appPath, arg);
             }
         }
     }
