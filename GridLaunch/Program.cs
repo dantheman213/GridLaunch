@@ -67,14 +67,19 @@ namespace GridLaunch
 
         private static void launchScreensaver(String appPath, String arg)
         {
-            string javaBin = getJavaInstallationPath() + "\\bin\\java.exe";
-            string jarPath = appPath + "\\" + EXECUTABLE_JAR;
-
-
+            //string javaBin = getJavaInstallationPath() + "\\bin\\java.exe";
+            //string jarPath = appPath + "\\" + EXECUTABLE_JAR;
+            
             Process proc = new Process();
             proc.StartInfo.FileName = "java";
-            proc.StartInfo.Arguments = "-jar " + jarPath + arg;
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.StartInfo.WorkingDirectory = appPath;
+
+            string jarArgs = String.Format("-jar {0}{1}", EXECUTABLE_JAR, arg);
+            Console.WriteLine("EXECUTING: java " + jarArgs);
+
+            proc.StartInfo.Arguments = jarArgs;
+            proc.StartInfo.UseShellExecute = false;
+            //proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             proc.Start();
             proc.WaitForExit();
@@ -97,7 +102,10 @@ namespace GridLaunch
 
                 if(args != null && args.Length > 0)
                 {
-                    arg = " " + args[0];
+                    Console.WriteLine("ARGS: " + String.Join(" ", args));
+                    arg = " " + args[0].ToLower().Substring(0, 2);
+
+                    Console.WriteLine("NEW ARG: " + arg);
                 }
 
                 launchScreensaver(appPath, arg);
